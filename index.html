@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>simplefunction</title>
+<meta name="description" content="Small things you can play with, mostly on phones. By Danny (이동원).">
+<meta property="og:title" content="simplefunction">
+<meta property="og:description" content="Small things you can play with, mostly on phones. By Danny (이동원).">
+<meta property="og:image" content="https://dlehddnjs.github.io/og.jpg">
+<meta property="og:url" content="https://dlehddnjs.github.io/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&display=swap" rel="stylesheet">
+<style>
+  /* tokens: a cool sheet of graph paper, green-black ink, one cobalt line (the function) */
+  :root {
+    --paper: #E8EDEA;      /* page */
+    --grid: #D5DDD9;       /* graph-paper lines */
+    --ink: #1D2622;        /* text */
+    --muted: #56625C;      /* secondary text */
+    --line: #2F45DE;       /* the plotted function, links, the play button */
+    --line-ink: #F3F5FF;   /* text on the cobalt button */
+    --font: "Bricolage Grotesque", "Apple SD Gothic Neo", "Noto Sans KR", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; color: var(--ink); font-family: var(--font); font-size: 18px; line-height: 1.55;
+    background-color: var(--paper);
+    background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 32px 32px; background-position: -1px -1px;
+  }
+  a { color: inherit; }
+  a:focus-visible, .play:focus-visible { outline: 3px solid var(--line); outline-offset: 3px; border-radius: 4px; }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 20px; }
+
+  /* header: the name, with its function plotted through it */
+  header { position: relative; padding: 56px 0 40px; }
+  .plot { position: absolute; left: 0; right: 0; top: 18px; height: 150px; width: 100%; overflow: visible; pointer-events: none; }
+  .plot path { fill: none; stroke: var(--line); stroke-width: 3; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+  h1 {
+    position: relative; margin: 0; font-size: clamp(52px, 13vw, 132px); line-height: .92; letter-spacing: -.035em;
+    font-weight: 800; font-variation-settings: "opsz" 96;
+  }
+  h1 .call { font-weight: 300; color: var(--muted); }
+  .intro { margin: 26px 0 0; max-width: 34em; font-size: 20px; }
+  .links { display: flex; gap: 22px; margin: 18px 0 0; padding: 0; list-style: none; font-weight: 600; }
+  .links a { text-decoration-color: var(--line); text-decoration-thickness: 2px; text-underline-offset: 4px; }
+
+  /* the shelf of projects */
+  main { padding: 24px 0 72px; }
+  .project {
+    display: grid; grid-template-columns: minmax(0, 360px) minmax(0, 1fr); gap: 40px; align-items: center;
+    padding: 36px 0; border-top: 2px solid var(--ink);
+  }
+  .shot { position: relative; aspect-ratio: 4 / 5; border-radius: 18px; overflow: hidden; background: #2b5c4a; box-shadow: 8px 8px 0 var(--ink); }
+  .shot video, .shot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+  .year { margin: 0 0 6px; color: var(--muted); font-weight: 600; }
+  h2 { margin: 0; font-size: clamp(36px, 6vw, 56px); line-height: 1; letter-spacing: -.025em; font-weight: 800; font-variation-settings: "opsz" 72; }
+  .project p { max-width: 32em; }
+  .what { margin: 18px 0 0; }
+  .built { margin: 14px 0 0; color: var(--muted); font-size: 16px; }
+  .play {
+    display: inline-block; margin-top: 24px; padding: 15px 26px; border-radius: 999px; background: var(--line); color: var(--line-ink);
+    font-weight: 700; font-size: 18px; text-decoration: none; box-shadow: 4px 4px 0 var(--ink); transition: transform .12s, box-shadow .12s;
+  }
+  .play:hover { transform: translate(-1px, -1px); box-shadow: 5px 5px 0 var(--ink); }
+  .play:active { transform: translate(3px, 3px); box-shadow: 1px 1px 0 var(--ink); }
+  .credit { margin: 18px 0 0; font-size: 15px; color: var(--muted); }
+  .bench { padding: 30px 0 0; border-top: 2px dashed var(--muted); color: var(--muted); font-size: 18px; }
+  footer { padding: 0 0 40px; color: var(--muted); font-size: 14px; }
+
+  @media (max-width: 720px) {
+    header { padding-top: 44px; }
+    /* on a phone the plot runs under the name instead of through it */
+    .plot { position: static; display: block; height: 64px; margin: 16px 0 -8px; }
+    .project { grid-template-columns: 1fr; gap: 24px; }
+    .shot { max-width: 420px; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .plot path { stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw 1.6s cubic-bezier(.6, 0, .2, 1) .2s forwards; }
+    @keyframes draw { to { stroke-dashoffset: 0; } }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>simple<br>function<span class="call">()</span></h1>
+    <!-- the page's one moment: a simple function, plotted once through the name (y = sin x / x, drawn on load) -->
+    <svg class="plot" viewBox="0 0 1000 150" preserveAspectRatio="none" aria-hidden="true"><path id="curve" d="" pathLength="1"/></svg>
+    <p class="intro">I’m Danny (이동원), a frontend and mobile engineer. I make small things you can play with, mostly on phones.</p>
+    <ul class="links">
+      <li><a href="https://github.com/dlehddnjs">GitHub</a></li>
+      <li><a href="https://velog.io/@simplefunction">Blog</a></li>
+    </ul>
+  </header>
+
+  <main>
+    <article class="project" id="groove-skater">
+      <a class="shot" href="https://groove-skater.vercel.app/" aria-label="Play Groove Skater">
+        <video src="projects/groove-skater/preview.mp4" poster="projects/groove-skater/poster.jpg" autoplay muted loop playsinline preload="metadata"></video>
+      </a>
+      <div>
+        <p class="year">2026, web</p>
+        <h2>Groove Skater</h2>
+        <p class="what">A tiny skater is the needle of a spinning record. Where it skates is what you hear: skate with the spin and the song plays backwards, jump and the needle lifts. Press PLAY and the motor cuts out, so you keep the song going by pushing on the beat.</p>
+        <p class="built">Canvas and Web Audio. The original animation measured frame by frame, beats found in the browser so your own songs work too.</p>
+        <a class="play" href="https://groove-skater.vercel.app/">Play Groove Skater</a>
+        <p class="credit">An interactive tribute to “Roller” by <a href="https://www.instagram.com/benedict_aubry_pro/">Bénédict Aubry</a>, made with his permission.</p>
+      </div>
+    </article>
+
+    <p class="bench">The next one is on the workbench.</p>
+  </main>
+
+  <footer>© 2026 Danny (이동원)</footer>
+</div>
+<script>
+  // plot y = sin(x) / x across the header, from x = -6π to 6π (the "simple function" of the name)
+  (() => {
+    const path = document.getElementById('curve'), points = [], steps = 400;
+    for (let i = 0; i <= steps; i++) {
+      const x = -6 * Math.PI + (12 * Math.PI) * i / steps, y = Math.abs(x) < 1e-6 ? 1 : Math.sin(x) / x;
+      points.push((i ? 'L' : 'M') + (i / steps * 1000).toFixed(1) + ' ' + (110 - y * 95).toFixed(1));
+    }
+    path.setAttribute('d', points.join(' '));
+  })();
+</script>
+</body>
+</html>
