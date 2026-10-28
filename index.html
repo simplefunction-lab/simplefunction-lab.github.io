@@ -11,77 +11,61 @@
 <meta property="og:url" content="https://simplefunction-lab.github.io/">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&display=swap" rel="stylesheet">
+<!-- simplefunction 디자인 시스템 v1: 글꼴까지 이 사이트에서 받는다 (외부 요청 없음) -->
+<link rel="preload" href="ds/v1/fonts/bricolage-grotesque.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="ds/v1/tokens.css">
 <style>
-  /* tokens: a cool sheet of graph paper, green-black ink, one cobalt line (the function) */
-  :root {
-    --paper: #E8EDEA;      /* page */
-    --grid: #D5DDD9;       /* graph-paper lines */
-    --ink: #1D2622;        /* text */
-    --muted: #56625C;      /* secondary text */
-    --line: #2F45DE;       /* the plotted function, links, the play button */
-    --line-ink: #F3F5FF;   /* text on the cobalt button */
-    --font: "Bricolage Grotesque", "Apple SD Gothic Neo", "Noto Sans KR", system-ui, sans-serif;
-  }
+  /* 이 페이지는 디자인 시스템 v1 토큰만 쓴다. 제품 칸마다 data-product로 기준색이 바뀐다 */
   * { box-sizing: border-box; }
   html { -webkit-text-size-adjust: 100%; }
   body {
-    margin: 0; color: var(--ink); font-family: var(--font); font-size: 18px; line-height: 1.55;
-    background-color: var(--paper);
+    margin: 0; color: var(--text); font-family: var(--font-brand); font-size: var(--text-l); line-height: var(--leading);
+    background-color: var(--bg);
     background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-    background-size: 32px 32px; background-position: -1px -1px;
+    background-size: var(--space-6) var(--space-6); background-position: -1px -1px;
   }
   a { color: inherit; }
-  a:focus-visible, .play:focus-visible { outline: 3px solid var(--line); outline-offset: 3px; border-radius: 4px; }
+  a:focus-visible, .play:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; border-radius: var(--radius-s); }
   .wrap { max-width: 1040px; margin: 0 auto; padding: 0 20px; }
 
-  /* header: the name, with its function plotted through it */
   header { position: relative; padding: 56px 0 40px; }
   .plot { position: absolute; left: 0; right: 0; top: 18px; height: 150px; width: 100%; overflow: visible; pointer-events: none; }
-  .plot path { fill: none; stroke: var(--line); stroke-width: 3; stroke-linecap: round; vector-effect: non-scaling-stroke; }
-  h1 {
-    position: relative; margin: 0; font-size: clamp(52px, 13vw, 132px); line-height: .92; letter-spacing: -.035em;
-    font-weight: 800; font-variation-settings: "opsz" 96;
-  }
-  h1 .call { font-weight: 300; color: var(--muted); }
-  .intro { margin: 26px 0 0; max-width: 34em; font-size: 20px; }
+  .plot path { fill: none; stroke: var(--accent); stroke-width: 3; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+  h1 { position: relative; margin: 0; font-size: var(--text-display); line-height: .92; letter-spacing: -.035em; font-weight: var(--weight-heavy); font-variation-settings: "opsz" 96; }
+  h1 .call { font-weight: 300; color: var(--text-2); }
+  .intro { margin: 26px 0 0; max-width: 34em; font-size: var(--text-xl); }
 
-  /* the shelf of projects */
-  main { padding: 24px 0 72px; }
-  .project {
-    display: grid; grid-template-columns: minmax(0, 360px) minmax(0, 1fr); gap: 40px; align-items: center;
-    padding: 36px 0; border-top: 2px solid var(--ink);
-  }
-  .shot { position: relative; aspect-ratio: 4 / 5; border-radius: 18px; overflow: hidden; background: #2b5c4a; box-shadow: 8px 8px 0 var(--ink); }
+  main { padding: var(--space-5) 0 72px; }
+  .project { display: grid; grid-template-columns: minmax(0, 360px) minmax(0, 1fr); gap: 40px; align-items: center; padding: 36px 0; border-top: 2px solid var(--text); }
+  .shot { position: relative; aspect-ratio: 4 / 5; border-radius: var(--radius-l); overflow: hidden; background: var(--stage); box-shadow: var(--shadow-card); }
   .shot video, .shot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
-  .year { margin: 0 0 6px; color: var(--muted); font-weight: 600; }
-  h2 { margin: 0; font-size: clamp(36px, 6vw, 56px); line-height: 1; letter-spacing: -.025em; font-weight: 800; font-variation-settings: "opsz" 72; }
+  .year { margin: 0 0 6px; color: var(--text-2); font-weight: var(--weight-strong); }
+  h2 { margin: 0; font-size: var(--text-3xl); line-height: var(--leading-tight); letter-spacing: -.025em; font-weight: var(--weight-heavy); font-variation-settings: "opsz" 72; }
+  /* 제품 이름 밑줄: 그 제품의 기준색 */
+  h2::after { content: ""; display: block; width: 56px; height: 6px; margin-top: var(--space-3); border-radius: var(--radius-pill); background: var(--accent); }
   .project p { max-width: 32em; }
   .what { margin: 18px 0 0; }
-  .built { margin: 14px 0 0; color: var(--muted); font-size: 16px; }
+  .built { margin: 14px 0 0; color: var(--text-2); font-size: var(--text-m); }
   .play {
-    display: inline-block; margin-top: 24px; padding: 15px 26px; border-radius: 999px; background: var(--line); color: var(--line-ink);
-    font-weight: 700; font-size: 18px; text-decoration: none; box-shadow: 4px 4px 0 var(--ink); transition: transform .12s, box-shadow .12s;
+    display: inline-block; margin-top: var(--space-5); padding: 15px 26px; border-radius: var(--radius-pill); background: var(--accent); color: var(--on-accent);
+    font-weight: 700; font-size: var(--text-l); text-decoration: none; box-shadow: var(--shadow-button); transition: transform var(--dur-fast), box-shadow var(--dur-fast);
   }
-  .play:hover { transform: translate(-1px, -1px); box-shadow: 5px 5px 0 var(--ink); }
-  .play:active { transform: translate(3px, 3px); box-shadow: 1px 1px 0 var(--ink); }
-  .credit { margin: 18px 0 0; font-size: 15px; color: var(--muted); }
-  .bench { padding: 30px 0 0; border-top: 2px dashed var(--muted); color: var(--muted); font-size: 18px; }
+  .play:hover { transform: translate(-1px, -1px); box-shadow: var(--shadow-button-hover); }
+  .play:active { transform: translate(3px, 3px); box-shadow: var(--shadow-button-press); }
+  .credit { margin: 18px 0 0; font-size: 15px; color: var(--text-2); }
+  .bench { padding: 30px 0 0; border-top: 2px dashed var(--text-2); color: var(--text-2); font-size: var(--text-l); }
   .support { margin: 14px 0 0; }
-  .support a { color: var(--line); font-weight: 700; }
-  footer { padding: 0 0 40px; color: var(--muted); font-size: 14px; }
+  .support a { color: var(--accent); font-weight: 700; }
+  footer { padding: 0 0 40px; color: var(--text-2); font-size: var(--text-s); }
 
   @media (max-width: 720px) {
     header { padding-top: 44px; }
-    /* on a phone the plot runs under the name instead of through it */
     .plot { position: static; display: block; height: 64px; margin: 16px 0 -8px; }
-    .project { grid-template-columns: 1fr; gap: 24px; }
+    .project { grid-template-columns: 1fr; gap: var(--space-5); }
     .shot { max-width: 420px; }
   }
   @media (prefers-reduced-motion: no-preference) {
-    .plot path { stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw 1.6s cubic-bezier(.6, 0, .2, 1) .2s forwards; }
+    .plot path { stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw 1.6s var(--ease-draw) .2s forwards; }
     @keyframes draw { to { stroke-dashoffset: 0; } }
   }
 </style>
@@ -96,7 +80,7 @@
   </header>
 
   <main>
-    <article class="project" id="orot">
+    <article class="project" id="orot" data-product="orot">
       <a class="shot" href="https://getorot.app" aria-label="Open the Orot website">
         <video src="projects/orot/preview.mp4" poster="projects/orot/poster.jpg" autoplay muted loop playsinline preload="metadata"></video>
       </a>
@@ -110,20 +94,20 @@
       </div>
     </article>
 
-    <article class="project" id="moment-select">
+    <article class="project" id="moment-select" data-product="moment-select">
       <a class="shot" href="https://simplefunction-lab.github.io/moment-select/" aria-label="Open Moment Select">
-        <img src="projects/moment-select/poster.jpg" alt="Moment Select on a phone: one photo with its score, Drop and Keep buttons below" loading="lazy">
+        <img src="projects/moment-select/poster.jpg" alt="Moment Select on a phone: a kept photo glowing warm, with its score, and Drop, Undo and Keep buttons below" loading="lazy">
       </a>
       <div>
         <p class="year">2026, web</p>
         <h2>Moment Select</h2>
-        <p class="what">Swipe through hundreds of photos and keep the ones you want. Made for the day the studio sends you 1,500 wedding shots and asks you to pick 30. The best shots come first, near-identical bursts are grouped, and two people can pick separately and merge.</p>
+        <p class="what">Swipe through hundreds of photos from a trip or a wedding and keep the ones you want. The best shots come first, near-identical bursts are grouped, and you can try it with four sample photos before loading your own.</p>
         <p class="built">Everything runs in the browser: face detection, sharpness and exposure scores, and a small model that learns from your picks and reorders the rest. Nothing is uploaded, and it works offline.</p>
         <a class="play" href="https://simplefunction-lab.github.io/moment-select/">Open Moment Select</a>
       </div>
     </article>
 
-    <article class="project" id="groove-skater">
+    <article class="project" id="groove-skater" data-product="groove-skater">
       <a class="shot" href="https://groove-skater.vercel.app/" aria-label="Play Groove Skater">
         <video src="projects/groove-skater/preview.mp4" poster="projects/groove-skater/poster.jpg" autoplay muted loop playsinline preload="metadata"></video>
       </a>
